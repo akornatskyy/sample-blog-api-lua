@@ -63,7 +63,7 @@ clean:
 	rm -rf luacov.* luac.out *.so
 
 qa:
-	$(ENV)/bin/luacheck -q src/ spec/ demos/
+	$(ENV)/bin/luacheck -q src/ spec/
 
 nginx:
 	WDIR=`pwd` ; \
