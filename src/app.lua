@@ -1,23 +1,11 @@
-local class = require 'core.class'
 local web = require 'web'
 
+local _ = require 'shared.utils'
 
-local WelcomeHandler = class({
-    get = function(self)
-        self.w:write('Hello World!\n')
-    end
-})
-
--- url mapping
-
-local all_urls = {
-    {'', WelcomeHandler}
-}
-
--- config
 
 local options = {
-    urls = all_urls
+    root_path = '/api/v1/',
+    urls = _.load_urls {'membership', 'posts', 'public'}
 }
 
 return web.app({web.middleware.routing}, options)
