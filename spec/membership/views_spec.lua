@@ -12,4 +12,3 @@ describe('membership.views', function()
         end)
     end)
 end)
-

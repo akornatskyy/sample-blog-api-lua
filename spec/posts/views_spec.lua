@@ -12,4 +12,3 @@ describe('posts.views', function()
         end)
     end)
 end)
-
