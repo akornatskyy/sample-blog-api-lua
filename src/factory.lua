@@ -7,11 +7,13 @@ local sessions = {
     rw = 'rw'
 }
 
+local packages = {'membership', 'posts', 'public'}
+
 -- repository lifetime: singleton
-local repositories = _.load_repositories(sessions, mode, {'public'})
+local repositories = _.load_repositories(sessions, mode, packages)
 
 -- service lifetime: per request
-local services = _.load_services {'public'}
+local services = _.load_services(packages)
 
 local Factory = {
     __index = function(self, name)
