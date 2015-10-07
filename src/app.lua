@@ -1,11 +1,10 @@
-local web = require 'web'
+local options = {}
 
-local _ = require 'shared.utils'
+local function new()
+    local web = require 'web'
+    local _ = require 'shared.utils'
+    options.urls = _.load_urls {'membership', 'posts', 'public'}
+    return web.app({web.middleware.routing}, options)
+end
 
-
-local options = {
-    root_path = '/api/v1/',
-    urls = _.load_urls {'membership', 'posts', 'public'}
-}
-
-return web.app({web.middleware.routing}, options)
+return {options = options, new = new}
