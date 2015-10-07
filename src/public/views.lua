@@ -19,5 +19,5 @@ local DailyQuoteHandler = class(shared.BaseHandler, {
 -- url mapping
 
 return {
-    {'quote/daily', DailyQuoteHandler}
+    {'quote/daily', DailyQuoteHandler, name = 'daily-quote'}
 }
