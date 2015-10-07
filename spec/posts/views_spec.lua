@@ -1,16 +1,13 @@
-local request = require 'http.functional.request'
-local writer = require 'http.functional.response'
+local client = require 'shared.client'
 local describe, it, assert = describe, it, assert
 
 
 describe('posts.views', function()
-    local app = assert(require 'app')
+    local go, path_for = client.new()
 
     describe('search posts', function()
     	it('responds with a quote', function()
-            local w = writer.new()
-            local req = request.new({path = '/api/v1/search/posts'})
-            app(w, req)
+            local w = go({path = path_for('search-posts')})
             assert.is_nil(w.status_code)
         end)
     end)
