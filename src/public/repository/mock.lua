@@ -1,13 +1,13 @@
 local _ = require 'shared.mock'
 
 local samples = _.load_samples()
+local QuoteRepository = {}
 
-local quote = {
-    get_daily_quote = function(self)
-        return samples.quote
-    end
-}
+
+function QuoteRepository:get_daily_quote()
+    return samples.quote
+end
 
 return {
-    quote = quote
+    quote = QuoteRepository
 }

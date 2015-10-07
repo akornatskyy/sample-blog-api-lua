@@ -1,7 +1,10 @@
-local service = {
-    daily = function(self)
-        return self.factory.quote:get_daily_quote()
-    end
-}
+local QuoteService = {}
 
-return service
+
+function QuoteService:daily()
+    return self.factory.quote:get_daily_quote()
+end
+
+return {
+    quote = QuoteService
+}
