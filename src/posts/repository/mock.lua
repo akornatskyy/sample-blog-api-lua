@@ -25,6 +25,54 @@ function PostsRepository:search_posts(q, page)
     end)
 end
 
+function PostsRepository:get_post(slug)
+    local p = _.first(samples.posts, function(p)
+        return p.slug == slug
+    end)
+    if not p then
+        return nil
+    end
+    local a = find_user_by_id(p.author_id)
+    return {
+        slug = p.slug,
+        title = p.title,
+        created_on = p.created_on,
+        author = {first_name = a.first_name, last_name = a.last_name},
+        message = p.message
+    }, p.id
+end
+
+function PostsRepository:list_comments(post_id, author_id)
+    local r = {}
+    local comments = samples.comments
+    author_id = author_id and tonumber(author_id)
+    for i = 1, #comments do
+        local c = comments[i]
+        if c.post_id == post_id and
+                (c.moderated or c.author_id == author_id) then
+            local a = find_user_by_id(c.author_id)
+            r[#r+1] = {
+                author = {
+                    first_name = a.first_name,
+                    last_name = a.last_name,
+                    gravatar_hash = a.gravatar_hash
+                },
+                created_on = c.created_on,
+                message = c.message,
+                moderated = c.moderated
+            }
+        end
+    end
+    return r
+end
+
+function PostsRepository:count_comments_awaiting_moderation(user_id, limit)
+    user_id = tonumber(user_id)
+    return #_.nfilter(samples.comments, limit, function(c)
+        return c.author_id == user_id and not c.moderated
+    end)
+end
+
 return {
     posts = PostsRepository
 }
