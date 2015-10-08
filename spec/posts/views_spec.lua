@@ -6,6 +6,15 @@ local describe, it, assert = describe, it, assert
 describe('posts.views', function()
     local go, path_for = client.new()
 
+    local signin = function(credentials)
+        local w = go {
+            method = 'POST',
+            path = path_for('signin'),
+            body = {username = 'demo', password = 'password'}
+        }
+        return w.headers['Set-Cookie']:match('^(_a=.-);'), w
+    end
+
     describe('search posts', function()
         local path = path_for('search-posts')
 
@@ -68,7 +77,7 @@ describe('posts.views', function()
                 query = {fields = 'permissions'}
             }
             local p = json.decode(table.concat(w.buffer))
-            assert(p.permissions)
+            assert.is_false(p.permissions.create_comment)
         end)
 
     	it('returns post with comments', function()
@@ -78,6 +87,17 @@ describe('posts.views', function()
             }
             local p = json.decode(table.concat(w.buffer))
             assert(p.comments)
+        end)
+
+        describe('authenticated', function()
+            local c = signin()
+            local w = go {
+                path = path,
+                query = {fields = 'permissions'},
+                headers = {cookie = c}
+            }
+            local p = json.decode(table.concat(w.buffer))
+            assert.is_true(p.permissions.create_comment)
         end)
     end)
 end)
