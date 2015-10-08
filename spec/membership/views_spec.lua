@@ -59,6 +59,17 @@ describe('membership.views', function()
             local errors = json.decode(table.concat(w.buffer))
             assert(errors.__ERROR__)
         end)
+
+    	it('checks if username is taken already', function()
+            local w = go {
+                method = 'POST',
+                path = path,
+                body = {username = 'demo'}
+            }
+            assert.equals(400, w.status_code)
+            local errors = json.decode(table.concat(w.buffer))
+            assert(errors.username)
+        end)
     end)
 
     describe('signout', function()
