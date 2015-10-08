@@ -4,16 +4,21 @@ local web = require 'web'
 local factory = require 'factory'
 
 
-local BaseHandler = mixin({
-    factory = function(self, session_name, func)
-        return factory({session_name=session_name}, func)
-    end,
+local BaseHandler = mixin(
+    {},
+    web.mixins.JSONMixin, web.mixins.ModelMixin, web.mixins.RoutingMixin,
+    web.mixins.AuthCookieMixin, web.mixins.PrincipalMixin
+)
 
-    json_error = function(self, msg)
-        self.w:set_status_code(400)
-        return self:json({['__ERROR__'] = msg})
+mixin(BaseHandler, {
+    factory = function(self, session_name, func)
+        return factory({
+            session_name = session_name,
+            errors = self.errors,
+            principal = self:get_principal()
+        }, func)
     end
-}, web.mixins.JSONMixin, web.mixins.ModelMixin, web.mixins.RoutingMixin)
+})
 
 return {
     BaseHandler = BaseHandler
