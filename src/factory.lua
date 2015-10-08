@@ -17,7 +17,11 @@ local services = _.load_services(packages)
 
 local Factory = {
     __index = function(self, name)
-        local s = setmetatable({factory = self.factory}, services[name])
+        local s = setmetatable({
+            factory = self.factory,
+            errors = rawget(self, 'errors'),
+            principal = rawget(self, 'principal')
+        }, services[name])
         self[name] = s
         return s
     end
