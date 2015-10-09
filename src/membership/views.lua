@@ -1,6 +1,7 @@
 local class = require 'core.class'
 
 local shared = require 'shared.views'
+local validators = require 'membership.validators'
 
 
 local SignInHandler = class(shared.BaseHandler, {
@@ -8,6 +9,7 @@ local SignInHandler = class(shared.BaseHandler, {
         local m = {username='', password=''}
         self.errors = {}
         if not self:update_model(m) or
+                not self:validate(m, validators.credential) or
                 not self:authenticate(m) then
             return self:json_errors()
         end
@@ -34,6 +36,8 @@ local SignUpHandler = class(shared.BaseHandler, {
         self.errors = {}
         if not self:update_model(m) or
                 not self:update_model(p) or
+                not self:validate(m, validators.registration) or
+                not self:validate(p, validators.password_match) or
                 not self:create_account(m) then
             return self:json_errors()
         end

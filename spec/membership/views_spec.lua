@@ -29,7 +29,8 @@ describe('membership.views', function()
             local w = go {method = 'POST', path = path}
             assert.equals(400, w.status_code)
             local errors = json.decode(table.concat(w.buffer))
-            assert(errors.__ERROR__)
+            assert(errors.username)
+            assert(errors.password)
         end)
 
     	it('responds with error if user is not found', function()
@@ -57,14 +58,14 @@ describe('membership.views', function()
             local w = go {method = 'POST', path = path}
             assert.equals(400, w.status_code)
             local errors = json.decode(table.concat(w.buffer))
-            assert(errors.__ERROR__)
+            assert(errors.email)
         end)
 
     	it('checks if username is taken already', function()
             local w = go {
                 method = 'POST',
                 path = path,
-                body = {username = 'demo'}
+                body = {username = 'demo', email = 'demo@somewhere.com'}
             }
             assert.equals(400, w.status_code)
             local errors = json.decode(table.concat(w.buffer))
