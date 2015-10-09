@@ -100,4 +100,51 @@ describe('posts.views', function()
             assert.is_true(p.permissions.create_comment)
         end)
     end)
+
+    describe('post comments', function()
+        local path = path_for('post-comments',
+                              {slug = 'inventore-hic-voluptatem'})
+
+    	it('prohibits unauthorized access', function()
+            local w = go {method = 'POST', path = path}
+            assert.equals(401, w.status_code)
+            assert.same({}, w.headers)
+        end)
+
+    	it('validates a message', function()
+            local c = signin()
+            local w = go {
+                method = 'POST',
+                path = path,
+                headers = {cookie = c}
+            }
+            assert.equals(400, w.status_code)
+            local errors = json.decode(table.concat(w.buffer))
+            assert(errors.message)
+        end)
+
+    	it('responds with an error if post cannot be found', function()
+            local c = signin()
+            local w = go {
+                method = 'POST',
+                path = path_for('post-comments', {slug = 'unknown'}),
+                headers = {cookie = c},
+                body = {message = 'Hello'}
+            }
+            assert.equals(400, w.status_code)
+            local errors = json.decode(table.concat(w.buffer))
+            assert(errors.__ERROR__)
+        end)
+
+    	it('adds a message', function()
+            local c = signin()
+            local w = go {
+                method = 'POST',
+                path = path,
+                headers = {cookie = c},
+                body = {message = 'Hello'}
+            }
+            assert.equals(201, w.status_code)
+        end)
+    end)
 end)

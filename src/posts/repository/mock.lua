@@ -5,6 +5,12 @@ local samples = _.load_samples()
 local PostsRepository = {}
 
 
+local function find_post_by_slug(slug)
+    return _.first(samples.posts, function(p)
+        return p.slug == slug
+    end)
+end
+
 function PostsRepository:search_posts(q, page)
     local posts = samples.posts
     if q and q ~= '' then
@@ -26,9 +32,7 @@ function PostsRepository:search_posts(q, page)
 end
 
 function PostsRepository:get_post(slug)
-    local p = _.first(samples.posts, function(p)
-        return p.slug == slug
-    end)
+    local p = find_post_by_slug(slug)
     if not p then
         return nil
     end
@@ -71,6 +75,22 @@ function PostsRepository:count_comments_awaiting_moderation(user_id, limit)
     return #_.nfilter(samples.comments, limit, function(c)
         return c.author_id == user_id and not c.moderated
     end)
+end
+
+function PostsRepository:add_post_comment(slug, author_id, message)
+    local p = find_post_by_slug(slug)
+    if not p then
+        return false
+    end
+    table.insert(samples.comments, 1, {
+        author_id = tonumber(author_id),
+        created_on = os.date('!%Y-%m-%dT%T+00:00'),
+        id = '',
+        message = message,
+        moderated = false,
+        post_id = p.id
+    })
+    return true
 end
 
 return {
