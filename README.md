@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/akornatskyy/sample-blog-api-lua/badge.svg?branch=master&service=github)](https://coveralls.io/github/akornatskyy/sample-blog-api-lua?branch=master)
 
 A simple blog API written using [lua](http://lua.org/) and
-[lucid]() web API toolkit.
+[lucid](https://github.com/akornatskyy/lucid) web API toolkit.
 
 # Setup
 
