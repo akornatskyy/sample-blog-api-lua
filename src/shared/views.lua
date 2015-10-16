@@ -6,8 +6,13 @@ local factory = require 'factory'
 
 local BaseHandler = mixin(
     {},
-    web.mixins.JSONMixin, web.mixins.ModelMixin, web.mixins.RoutingMixin,
-    web.mixins.AuthCookieMixin, web.mixins.PrincipalMixin
+    web.mixins.authcookie,
+    web.mixins.json,
+    web.mixins.locale,
+    web.mixins.model,
+    web.mixins.principal,
+    web.mixins.routing,
+    web.mixins.validation
 )
 
 mixin(BaseHandler, {
