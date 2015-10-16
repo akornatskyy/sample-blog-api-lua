@@ -1,8 +1,8 @@
 local mixin = require 'core.mixin'
-local shared = require 'shared.mixins'
+local validation = require 'validation'
 
 
-local MembershipService = mixin({}, shared.ErrorsMixin)
+local MembershipService = mixin({}, validation.mixins.set_error)
 
 
 function MembershipService:user()

@@ -1,8 +1,8 @@
 local mixin = require 'core.mixin'
-local shared = require 'shared.mixins'
+local validation = require 'validation'
 
 
-local PostsService = mixin({}, shared.ErrorsMixin)
+local PostsService = mixin({}, validation.mixins.set_error)
 
 
 function PostsService:search_posts(q, page)
