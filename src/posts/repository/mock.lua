@@ -38,6 +38,7 @@ function PostsRepository:get_post(slug)
     end
     local a = find_user_by_id(p.author_id)
     return {
+        id = p.id,
         slug = p.slug,
         title = p.title,
         created_on = p.created_on,

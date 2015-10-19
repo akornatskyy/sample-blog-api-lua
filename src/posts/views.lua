@@ -42,16 +42,16 @@ local PostHandler = class(shared.BaseHandler, {
 
     get_post = function(self, slug, fields)
         return self:factory('ro', function(f)
-            local p, post_id = f.posts:get_post(slug)
+            local p = f.posts:get_post(slug)
             if not p then
                 return nil
             end
             if fields then
                 if fields:find('permissions', 1, true) then
-                    p.permissions = f.posts:post_permissions(post_id)
+                    p.permissions = f.posts:post_permissions(p.post_id)
                 end
                 if fields:find('comments', 1, true) then
-                    p.comments = f.posts:list_comments(post_id)
+                    p.comments = f.posts:list_comments(p.post_id)
                 end
             end
             return p
