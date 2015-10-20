@@ -31,6 +31,11 @@ function PostsRepository:search_posts(q, page)
     end)
 end
 
+function PostsRepository:get_post_id(slug)
+    local p = find_post_by_slug(slug)
+    return p and p.id
+end
+
 function PostsRepository:get_post(slug)
     local p = find_post_by_slug(slug)
     if not p then
@@ -78,18 +83,14 @@ function PostsRepository:count_comments_awaiting_moderation(user_id, limit)
     end)
 end
 
-function PostsRepository:add_post_comment(slug, author_id, message)
-    local p = find_post_by_slug(slug)
-    if not p then
-        return false
-    end
+function PostsRepository:add_post_comment(post_id, author_id, message)
     table.insert(samples.comments, 1, {
         author_id = tonumber(author_id),
         created_on = os.date('!%Y-%m-%dT%T+00:00'),
         id = '',
         message = message,
         moderated = false,
-        post_id = p.id
+        post_id = post_id
     })
     return true
 end
