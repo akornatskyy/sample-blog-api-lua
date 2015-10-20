@@ -40,10 +40,14 @@ function PostsService:add_post_comment(slug, message)
             'There are too many of your comments awaiting ' ..
             'moderation. Come back later, please.')
     end
-    local r = self.factory.posts:add_post_comment(
-        slug, self.principal.id, message)
-    if not r then
+    local post_id = self.factory.posts:get_post_id(slug)
+    if not post_id then
         return self:set_error('We\'re sorry... the post cannot be found.')
+    end
+    local ok = self.factory.posts:add_post_comment(
+        post_id, self.principal.id, message)
+    if not ok then
+        return self:set_error('We\'re sorry... the comment cannot be added.')
     end
     return true
 end
