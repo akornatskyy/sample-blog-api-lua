@@ -48,10 +48,10 @@ local PostHandler = class(shared.BaseHandler, {
             end
             if fields then
                 if fields:find('permissions', 1, true) then
-                    p.permissions = f.posts:post_permissions(p.post_id)
+                    p.permissions = f.posts:post_permissions(p.id)
                 end
                 if fields:find('comments', 1, true) then
-                    p.comments = f.posts:list_comments(p.post_id)
+                    p.comments = f.posts:list_comments(p.id)
                 end
             end
             return p

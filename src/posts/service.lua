@@ -14,11 +14,13 @@ function PostsService:get_post(slug)
 end
 
 function PostsService:list_comments(post_id)
+    assert(post_id)
     return self.factory.posts:list_comments(
         post_id, self.principal and self.principal.id)
 end
 
 function PostsService:post_permissions(post_id)
+    assert(post_id)
     return {
         create_comment = self:can_comment()
     }
