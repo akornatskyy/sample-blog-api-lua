@@ -1,5 +1,4 @@
 local client = require 'shared.client'
-local json = require 'core.encoding.json'
 local describe, it, assert = describe, it, assert
 
 
@@ -28,7 +27,7 @@ describe('membership.views', function()
     	it('validates user credentials', function()
             local w = go {method = 'POST', path = path}
             assert.equals(400, w.status_code)
-            local errors = json.decode(table.concat(w.buffer))
+            local errors = w.data
             assert(errors.username)
             assert(errors.password)
         end)
@@ -39,14 +38,14 @@ describe('membership.views', function()
             }
             assert.is_nil(auth_cookie)
             assert.equals(400, w.status_code)
-            local errors = json.decode(table.concat(w.buffer))
+            local errors = w.data
             assert(errors.__ERROR__)
         end)
 
     	it('issues auth cookie', function()
             local auth_cookie, w = signin()
             assert(auth_cookie)
-            local u = json.decode(table.concat(w.buffer))
+            local u = w.data
             assert.equals('demo', u.username)
         end)
     end)
@@ -57,7 +56,7 @@ describe('membership.views', function()
     	it('validates registration information', function()
             local w = go {method = 'POST', path = path}
             assert.equals(400, w.status_code)
-            local errors = json.decode(table.concat(w.buffer))
+            local errors = w.data
             assert(errors.email)
         end)
 
@@ -68,7 +67,7 @@ describe('membership.views', function()
                 body = {username = 'demo', email = 'demo@somewhere.com'}
             }
             assert.equals(400, w.status_code)
-            local errors = json.decode(table.concat(w.buffer))
+            local errors = w.data
             assert(errors.username)
         end)
     end)
@@ -96,7 +95,7 @@ describe('membership.views', function()
     	it('confirms user is authenticated', function()
             local auth_cookie = signin()
             local w = go {path = path, headers = {cookie = auth_cookie}}
-            local u = json.decode(table.concat(w.buffer))
+            local u = w.data
             assert.equals('demo', u.username)
         end)
     end)

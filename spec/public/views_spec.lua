@@ -1,5 +1,4 @@
 local client = require 'shared.client'
-local json = require 'core.encoding.json'
 local describe, it, assert = describe, it, assert
 
 
@@ -11,8 +10,7 @@ describe('public.views', function()
 
     	it('responds with a quote', function()
             local w = go {path = path}
-            assert.is_nil(w.status_code)
-            local q = json.decode(table.concat(w.buffer))
+            local q = w.data
             assert(q.author)
             assert(q.message)
         end)

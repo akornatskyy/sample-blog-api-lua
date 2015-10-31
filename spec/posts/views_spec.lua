@@ -1,5 +1,4 @@
 local client = require 'shared.client'
-local json = require 'core.encoding.json'
 local describe, it, assert = describe, it, assert
 
 
@@ -21,23 +20,20 @@ describe('posts.views', function()
     	it('validates query params', function()
             local w = go {path = path, query = {page = 'x'}}
             assert.equals(400, w.status_code)
-            assert.same({['Content-Type'] = 'application/json'}, w.headers)
-            local errors = json.decode(table.concat(w.buffer))
+            local errors = w.data
             assert(errors.page)
         end)
 
     	it('responds with a list of posts', function()
             local w = go {path = path}
-            assert.is_nil(w.status_code)
-            assert.same({['Content-Type'] = 'application/json'}, w.headers)
-            local posts = json.decode(table.concat(w.buffer))
+            local posts = w.data
             assert.equals(2, #posts.items)
             assert.equals(1, posts.paging.after)
         end)
 
         it('supports paging', function()
             local w = go {path = path, query = {page = 2}}
-            local posts = json.decode(table.concat(w.buffer))
+            local posts = w.data
             assert.equals(2, #posts.items)
             assert.equals(1, posts.paging.before)
             assert.equals(3, posts.paging.after)
@@ -45,7 +41,7 @@ describe('posts.views', function()
 
         it('supports query', function()
             local w = go {path = path, query = {q = 'com'}}
-            local posts = json.decode(table.concat(w.buffer))
+            local posts = w.data
             assert.equals(1, #posts.items)
             assert.is_nil(posts.paging.before)
             assert.is_nil(posts.paging.after)
@@ -63,9 +59,7 @@ describe('posts.views', function()
 
     	it('responds with a post', function()
             local w = go {path = path}
-            assert.is_nil(w.status_code)
-            assert.same({['Content-Type'] = 'application/json'}, w.headers)
-            local p = json.decode(table.concat(w.buffer))
+            local p = w.data
             assert(p)
             assert.is_nil(p.permissions)
             assert.is_nil(p.comments)
@@ -76,7 +70,7 @@ describe('posts.views', function()
                 path = path,
                 query = {fields = 'permissions'}
             }
-            local p = json.decode(table.concat(w.buffer))
+            local p = w.data
             assert.is_false(p.permissions.create_comment)
         end)
 
@@ -85,7 +79,7 @@ describe('posts.views', function()
                 path = path,
                 query = {fields = 'comments'}
             }
-            local p = json.decode(table.concat(w.buffer))
+            local p = w.data
             assert(p.comments)
         end)
 
@@ -96,7 +90,7 @@ describe('posts.views', function()
                 query = {fields = 'permissions'},
                 headers = {cookie = c}
             }
-            local p = json.decode(table.concat(w.buffer))
+            local p = w.data
             assert.is_true(p.permissions.create_comment)
         end)
     end)
@@ -119,7 +113,7 @@ describe('posts.views', function()
                 headers = {cookie = c}
             }
             assert.equals(400, w.status_code)
-            local errors = json.decode(table.concat(w.buffer))
+            local errors = w.data
             assert(errors.message)
         end)
 
@@ -132,7 +126,7 @@ describe('posts.views', function()
                 body = {message = 'Hello'}
             }
             assert.equals(400, w.status_code)
-            local errors = json.decode(table.concat(w.buffer))
+            local errors = w.data
             assert(errors.__ERROR__)
         end)
 
