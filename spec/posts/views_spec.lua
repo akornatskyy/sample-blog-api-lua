@@ -25,7 +25,7 @@ describe('posts.views', function()
         end)
 
     	it('responds with a list of posts', function()
-            local w = go {path = path}
+            local w = go {path = path, query = {}}
             local posts = w.data
             assert.equals(2, #posts.items)
             assert.equals(1, posts.paging.after)
@@ -58,7 +58,7 @@ describe('posts.views', function()
         end)
 
     	it('responds with a post', function()
-            local w = go {path = path}
+            local w = go {path = path, query = {}}
             local p = w.data
             assert(p)
             assert.is_nil(p.permissions)
