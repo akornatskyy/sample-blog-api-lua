@@ -15,6 +15,8 @@ make env nginx
 eval "$(env/bin/luarocks path --bin)"
 ```
 
+... or use docker [image](https://github.com/akornatskyy/sample-blog-api-lua/tree/master/docker).
+
 # Prepare
 
 The static content in
