@@ -8,7 +8,7 @@ describe('public.views', function()
     describe('daily quote', function()
         local path = path_for('daily-quote')
 
-    	it('responds with a quote', function()
+        it('responds with a quote', function()
             local w = go {path = path}
             local q = w.data
             assert(q.author)

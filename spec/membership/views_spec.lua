@@ -24,7 +24,7 @@ describe('membership.views', function()
     describe('signin', function()
         local path = path_for('signin')
 
-    	it('validates user credentials', function()
+        it('validates user credentials', function()
             local w = go {method = 'POST', path = path}
             assert.equals(400, w.status_code)
             local errors = w.data
@@ -32,7 +32,7 @@ describe('membership.views', function()
             assert(errors.password)
         end)
 
-    	it('responds with error if user is not found', function()
+        it('responds with error if user is not found', function()
             local auth_cookie, w = signin {
                 username = 'unknown', password = 'password'
             }
@@ -42,7 +42,7 @@ describe('membership.views', function()
             assert(errors.__ERROR__)
         end)
 
-    	it('issues auth cookie', function()
+        it('issues auth cookie', function()
             local auth_cookie, w = signin()
             assert(auth_cookie)
             local u = w.data
@@ -53,14 +53,14 @@ describe('membership.views', function()
     describe('signup', function()
         local path = path_for('signup')
 
-    	it('validates registration information', function()
+        it('validates registration information', function()
             local w = go {method = 'POST', path = path}
             assert.equals(400, w.status_code)
             local errors = w.data
             assert(errors.email)
         end)
 
-    	it('checks if username is taken already', function()
+        it('checks if username is taken already', function()
             local w = go {
                 method = 'POST',
                 path = path,
@@ -75,7 +75,7 @@ describe('membership.views', function()
     describe('signout', function()
         local path = path_for('signout')
 
-    	it('removes auth cookie', function()
+        it('removes auth cookie', function()
             local auth_cookie = signin()
             local w = go {path = path, headers = {cookie = auth_cookie}}
             assert.equals(
@@ -87,12 +87,12 @@ describe('membership.views', function()
     describe('user', function()
         local path = path_for('user')
 
-    	it('responds with unauthorized status code', function()
+        it('responds with unauthorized status code', function()
             local w = go {path = path}
             assert.equals(401, w.status_code)
         end)
 
-    	it('confirms user is authenticated', function()
+        it('confirms user is authenticated', function()
             local auth_cookie = signin()
             local w = go {path = path, headers = {cookie = auth_cookie}}
             local u = w.data

@@ -17,14 +17,14 @@ describe('posts.views', function()
     describe('search posts', function()
         local path = path_for('search-posts')
 
-    	it('validates query params', function()
+        it('validates query params', function()
             local w = go {path = path, query = {page = 'x'}}
             assert.equals(400, w.status_code)
             local errors = w.data
             assert(errors.page)
         end)
 
-    	it('responds with a list of posts', function()
+        it('responds with a list of posts', function()
             local w = go {path = path, query = {}}
             local posts = w.data
             assert.equals(2, #posts.items)
@@ -51,13 +51,13 @@ describe('posts.views', function()
     describe('get post', function()
         local path = path_for('post', {slug = 'inventore-hic-voluptatem'})
 
-    	it('responds with not found status code', function()
+        it('responds with not found status code', function()
             local w = go {path = path_for('post', {slug = 'unknown'})}
             assert.equals(404, w.status_code)
             assert.same({}, w.headers)
         end)
 
-    	it('responds with a post', function()
+        it('responds with a post', function()
             local w = go {path = path, query = {}}
             local p = w.data
             assert(p)
@@ -65,7 +65,7 @@ describe('posts.views', function()
             assert.is_nil(p.comments)
         end)
 
-    	it('returns post with permissions', function()
+        it('returns post with permissions', function()
             local w = go {
                 path = path,
                 query = {fields = 'permissions'}
@@ -74,7 +74,7 @@ describe('posts.views', function()
             assert.is_false(p.permissions.create_comment)
         end)
 
-    	it('returns post with comments', function()
+        it('returns post with comments', function()
             local w = go {
                 path = path,
                 query = {fields = 'comments'}
@@ -99,13 +99,13 @@ describe('posts.views', function()
         local path = path_for('post-comments',
                               {slug = 'inventore-hic-voluptatem'})
 
-    	it('prohibits unauthorized access', function()
+        it('prohibits unauthorized access', function()
             local w = go {method = 'POST', path = path}
             assert.equals(401, w.status_code)
             assert.same({}, w.headers)
         end)
 
-    	it('validates a message', function()
+        it('validates a message', function()
             local c = signin()
             local w = go {
                 method = 'POST',
@@ -117,7 +117,7 @@ describe('posts.views', function()
             assert(errors.message)
         end)
 
-    	it('responds with an error if post cannot be found', function()
+        it('responds with an error if post cannot be found', function()
             local c = signin()
             local w = go {
                 method = 'POST',
@@ -130,7 +130,7 @@ describe('posts.views', function()
             assert(errors.__ERROR__)
         end)
 
-    	it('adds a message', function()
+        it('adds a message', function()
             local c = signin()
             local w = go {
                 method = 'POST',
