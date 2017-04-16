@@ -22,7 +22,7 @@ env:
 		export MACOSX_DEPLOYMENT_TARGET=10.10 ; \
 	    make -s install PREFIX=$(ENV) INSTALL_INC=$(ENV)/include ; \
 		ln -sf luajit-$(LUA_VERSION) $(ENV)/bin/lua ; \
-		cd .. ; rm -rf luajit-$(LUA_VERSION) ; \
+		cd .. ; rm -rf LuaJIT-$(LUA_VERSION) ; \
 	else \
 		wget -c http://www.lua.org/ftp/lua-$(LUA_VERSION).tar.gz \
 			-O - | tar -xzf - ; \
