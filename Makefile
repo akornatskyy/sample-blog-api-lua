@@ -5,9 +5,9 @@ ENV=$(shell pwd)/env
 LUA_IMPL=luajit
 LUA_VERSION=2.1.0-beta2
 PLATFORM=macosx
-LUA_ROCKS_VERSION=2.2.2
-NGINX_VERSION=1.10.3
-NGINX_LUA_MODULE_VERSION=0.10.8
+LUA_ROCKS_VERSION=2.4.2
+NGINX_VERSION=1.12.1
+NGINX_LUA_MODULE_VERSION=0.10.10
 
 
 env:
@@ -39,7 +39,7 @@ env:
 		--force-config && \
 	make -s build install && \
 	cd .. ; rm -rf luarocks-$(LUA_ROCKS_VERSION) ; \
-	for rock in busted luacov luacheck lbase64 struct luacrypto lua-cjson; do \
+	for rock in busted luacov luacheck lbase64 struct luaossl lua-cjson; do \
 		$(ENV)/bin/luarocks --deps-mode=one install $$rock ; \
 	done ; \
 	$(ENV)/bin/luarocks install --server=http://luarocks.org/dev lucid
