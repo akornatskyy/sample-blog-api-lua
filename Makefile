@@ -22,7 +22,8 @@ env: luarocks
 	for rock in lbase64 luaossl lua-cjson luasocket struct utf8 \
 			busted luacov luacheck ; do \
 		$(ENV)/bin/luarocks --deps-mode=one install $$rock ; \
-	done
+	done ; \
+	$(ENV)/bin/luarocks install --server=http://luarocks.org/dev lucid
 
 test:
 	$(ENV)/bin/busted
