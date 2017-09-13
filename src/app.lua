@@ -23,12 +23,21 @@ local options = {
     auth_cookie = {
         name = '_a'
     },
-    principal = require 'security.principal'
+    principal = require 'security.principal',
+    cors = http.cors.new {
+        allowed_origins = {'*'}, --{'http://web.local:8080'},
+        allow_credentials = true,
+        allowed_methods = {'GET', 'HEAD', 'POST'},
+        allowed_headers = {'content-type', 'x-requested-with'},
+        exposed_headers = {'cache-control', 'etag'},
+        max_age = 180
+    }
 }
 
 local function new()
     options.auth_cookie.path = options.root_path or '/'
     local middlewares = {
+        http.middleware.cors,
         http.middleware.caching,
         web.middleware.routing
     }
