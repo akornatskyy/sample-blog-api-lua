@@ -4,8 +4,10 @@ local function map(t, f, s, e)
     if not s then s = 1 end
     if not e then e = #t end
     local r = {}
+    local j = 1
     for i = s, e do
-        r[#r+1] = f(t[i])
+        r[j] = f(t[i])
+        j = j + 1
     end
     return r
 end
@@ -29,6 +31,9 @@ local function pager(items, page, size, f)
     local s = page * size + 1
     local e = s + size - 1
     local n = #items
+    if n == 0 then
+        return {}
+    end
     local paging = {}
     if page > 0 then
         paging.before = page - 1
