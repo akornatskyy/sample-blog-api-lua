@@ -25,20 +25,20 @@ need to be build with *web* api strategy:
 
 ```sh
 cd ../sample-blog-react
-gulp build --api=web
+API=web npm run build
 ```
 
-optionally:
+in case API is served by another host:
 
 ```sh
-gulp watch --debug --api=web
+API=web HOST=http://api.local:8080 npm start
 ```
 
 and linked to `content/static` directory:
 
 ```sh
 cd ../sample-blog-api-lua
-ln -s ../sample-blog-react/build static
+ln -s ../sample-blog-react/dist static
 ```
 
 # Run
