@@ -5,7 +5,7 @@ ENV=$(shell pwd)/env
 LUA_IMPL=luajit
 LUA_VERSION=2.1.0-beta2
 LUAROCKS_VERSION=2.4.3
-NGINX_VERSION=1.12.2
+NGINX_VERSION=1.13.7
 NGINX_LUA_MODULE_VERSION=0.10.11
 
 ifeq (Darwin,$(shell uname -s))
