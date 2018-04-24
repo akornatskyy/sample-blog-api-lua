@@ -3,10 +3,10 @@
 
 ENV=$(shell pwd)/env
 LUA_IMPL=luajit
-LUA_VERSION=2.1.0-beta2
-LUAROCKS_VERSION=2.4.3
-NGINX_VERSION=1.13.7
-NGINX_LUA_MODULE_VERSION=0.10.11
+LUA_VERSION=2.1.0-beta3
+LUAROCKS_VERSION=2.4.4
+NGINX_VERSION=1.14.0
+NGINX_LUA_MODULE_VERSION=0.10.12
 
 ifeq (Darwin,$(shell uname -s))
   PLATFORM?=macosx
@@ -21,7 +21,7 @@ clean:
 env: luarocks
 	for rock in lbase64 luaossl lua-cjson luasocket struct utf8 \
 			busted luacov luacheck ; do \
-		$(ENV)/bin/luarocks --deps-mode=one install $$rock ; \
+		$(ENV)/bin/luarocks install $$rock ; \
 	done ; \
 	$(ENV)/bin/luarocks install --server=http://luarocks.org/dev lucid
 
