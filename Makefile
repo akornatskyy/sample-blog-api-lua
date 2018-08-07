@@ -2,11 +2,11 @@
 .PHONY: clean env test qa run debian rm lua luajit luarocks nginx
 
 ENV=$(shell pwd)/env
-LUA_IMPL=luajit
-LUA_VERSION=2.1.0-beta3
-LUAROCKS_VERSION=2.4.4
-NGINX_VERSION=1.14.0
-NGINX_LUA_MODULE_VERSION=0.10.12
+LUA_IMPL?=luajit
+LUA_VERSION?=2.1
+LUAROCKS_VERSION?=2.4.4
+NGINX_VERSION?=1.15.2
+NGINX_LUA_MODULE_VERSION?=0.10.13
 
 ifeq (Darwin,$(shell uname -s))
   PLATFORM?=macosx
@@ -20,7 +20,7 @@ clean:
 
 env: luarocks
 	for rock in lbase64 luaossl lua-cjson luasocket struct utf8 \
-			busted luacov luacheck ; do \
+			busted cluacov luacheck ; do \
 		$(ENV)/bin/luarocks install $$rock ; \
 	done ; \
 	$(ENV)/bin/luarocks install --server=http://luarocks.org/dev lucid
@@ -52,16 +52,16 @@ lua: rm
 	cd .. && rm -rf lua-$(LUA_VERSION)
 
 luajit: rm
+	mkdir luajit && cd luajit && \
 	wget -c https://github.com/LuaJIT/LuaJIT/archive/v$(LUA_VERSION).tar.gz \
-		-O - | tar xzf - && \
-  	cd LuaJIT-$(LUA_VERSION) && \
-  	sed -i.bak s%/usr/local%$(ENV)%g src/luaconf.h && \
+		-O - | tar -xzC . --strip-components=1 && \
+	sed -i.bak s%/usr/local%$(ENV)%g src/luaconf.h && \
 	sed -i.bak s%./?.lua\"%./?.lua\;./src/?.lua\"%g src/luaconf.h && \
 	export MACOSX_DEPLOYMENT_TARGET=10.10 && \
 	unset LUA_PATH && unset LUA_CPATH && \
-    make -s install PREFIX=$(ENV) INSTALL_INC=$(ENV)/include && \
-	ln -sf luajit-$(LUA_VERSION) $(ENV)/bin/lua && \
-	cd .. && rm -rf LuaJIT-$(LUA_VERSION)
+	make -s install PREFIX=$(ENV) INSTALL_INC=$(ENV)/include && \
+	ln -sf $(ENV)/bin/luajit-* $(ENV)/bin/lua && \
+	cd .. && rm -rf luajit
 
 luarocks: $(LUA_IMPL)
 	wget -qc https://luarocks.org/releases/luarocks-$(LUAROCKS_VERSION).tar.gz \
