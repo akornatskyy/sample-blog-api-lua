@@ -4,8 +4,8 @@
 ENV=$(shell pwd)/env
 LUA_IMPL?=luajit
 LUA_VERSION?=2.1
-LUAROCKS_VERSION?=3.3.0
-NGINX_VERSION?=1.17.8
+LUAROCKS_VERSION?=3.3.1
+NGINX_VERSION?=1.17.9
 NGINX_LUA_MODULE_VERSION?=0.10.13
 
 ifeq (Darwin,$(shell uname -s))
@@ -92,7 +92,8 @@ nginx:
 		export LUA_INC=$(ENV)/include ; \
 	fi && \
 	./configure --prefix=$(ENV) --without-http_rewrite_module --without-pcre \
-		--add-module=./lua-nginx-module && \
+		--add-module=./lua-nginx-module \
+		--with-ld-opt="-Wl,-rpath,$$LUAJIT_LIB$$LUA_LIB" ; \
 	make -j4 && \
 	\
 	cd .. && \
