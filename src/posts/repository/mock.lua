@@ -49,7 +49,7 @@ function PostsRepository:get_post(slug)
         created_on = p.created_on,
         author = {first_name = a.first_name, last_name = a.last_name},
         message = p.message
-    }, p.id
+    }
 end
 
 function PostsRepository:list_comments(post_id, author_id)
