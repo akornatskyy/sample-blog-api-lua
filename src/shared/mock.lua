@@ -1,8 +1,12 @@
 local json = require 'core.encoding.json'
 
 local function map(t, f, s, e)
-    if not s then s = 1 end
-    if not e then e = #t end
+    if not s then
+        s = 1
+    end
+    if not e then
+        e = #t
+    end
     local r = {}
     local j = 1
     for i = s, e do
@@ -18,22 +22,22 @@ local function trancate_words(s, count)
     s = s:gsub('\\n', ' ')
     for i in s:gmatch('%S+') do
         if n == 0 then
-            r[#r+1] = '...'
+            r[#r + 1] = '...'
             break
         end
-        r[#r+1] = i
+        r[#r + 1] = i
         n = n - 1
     end
     return table.concat(r, ' ')
 end
 
 local function pager(items, page, size, f)
-    local s = page * size + 1
-    local e = s + size - 1
     local n = #items
     if n == 0 then
         return {}
     end
+    local s = page * size + 1
+    local e = s + size - 1
     local paging = {}
     if page > 0 then
         paging.before = page - 1
@@ -63,8 +67,8 @@ local function nfilter(items, n, predicate)
     for i = 1, #items do
         local d = items[i]
         if predicate(d) then
-            r[#r+1] = d
-            n = n -1
+            r[#r + 1] = d
+            n = n - 1
             if n == 0 then
                 break
             end
