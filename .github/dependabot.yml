@@ -1,0 +1,14 @@
+version: 2
+updates:
+- package-ecosystem: docker
+  directory: "/docker/luajit2.1"
+  schedule:
+    interval: daily
+    time: "03:00"
+  open-pull-requests-limit: 15
+- package-ecosystem: docker
+  directory: "/docker/openresty"
+  schedule:
+    interval: daily
+    time: "03:00"
+  open-pull-requests-limit: 15
